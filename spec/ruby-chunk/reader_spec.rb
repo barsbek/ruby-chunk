@@ -8,7 +8,7 @@ RSpec.describe RubyChunk::Reader do
     @reader = RubyChunk::Reader.new(@test_file)
   end
 
-  def last_index
+  def last_line_index
     @lines.count - 1
   end
 
@@ -34,13 +34,14 @@ RSpec.describe RubyChunk::Reader do
   end
 
   it "should read head of the file" do
-    head = @lines[0..9].join
+    to = RubyChunk::Reader::LINES_NUMBER - 1
+    head = @lines[0..to].join
     expect(@reader.head).to eql(head)
   end
 
   it "should read tail of the file" do
-    #TODO load from class the default number of lines
-    tail = @lines[(last_index - 10)..last_index].join
+    from = last_line_index - RubyChunk::Reader::LINES_NUMBER
+    tail = @lines[from..last_line_index].join
     expect(@reader.tail).to eql(tail)
   end
 
@@ -52,8 +53,29 @@ RSpec.describe RubyChunk::Reader do
 
   it "should read particular number of lines from tail" do
     number_of_lines = 3
-    from = last_index - number_of_lines
-    tail = @lines[from..last_index].join
+    from = last_line_index - number_of_lines
+    tail = @lines[from..last_line_index].join
     expect(@reader.tail(number_of_lines)).to eq(tail)
+  end
+
+  it "shouldn't fail on incorrect ranges" do
+    big_number = @lines.count + 100
+    expect(@reader.lines_in_range(0, 0)).to eql(@lines[0])
+    expect(@reader.lines_in_range(-big_number, last_line_index)).to eql(@content)
+    expect(@reader.lines_in_range(-big_number, last_line_index)).to eql(@content)
+    expect(@reader.lines_in_range(0, big_number)).to eql(@content)
+    expect(@reader.lines_in_range(0, big_number)).to eql(@content)
+    expect(@reader.lines_in_range(-big_number, big_number)).to eql(@content)
+    expect(@reader.lines_in_range(big_number, big_number)).to be_nil
+  end
+
+  it "shouldn't fail on incorrect number of lines" do
+    big_number = @lines.count + 100
+    expect(@reader.tail(0)).to be_nil
+    expect(@reader.tail(-big_number)).to be_nil
+    expect(@reader.tail(big_number)).to eql(@content)
+    expect(@reader.head(0)).to be_nil
+    expect(@reader.head(-big_number)).to be_nil
+    expect(@reader.head(big_number)).to eql(@content)
   end
 end
