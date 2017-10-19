@@ -12,5 +12,5 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/barsbek/ruby-chunk"
   s.license = 'MIT'
 
-  s.add_development_dependency "rspec", "~> 3.6.0"
+  s.add_development_dependency "rspec", "~> 3.6"
 end
