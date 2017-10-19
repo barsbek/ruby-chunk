@@ -3,8 +3,8 @@ require "spec_helper"
 RSpec.describe RubyChunk::Reader do
   before(:each) do
     @test_file = "spec/testfile"
-    @lines = File.readlines(@test_file)
-    @content = @lines.join
+    @lines = File.readlines(@test_file).map(&:chomp)
+    @content = File.read(@test_file).chomp
     @reader = RubyChunk::Reader.new(@test_file)
   end
 
@@ -12,9 +12,12 @@ RSpec.describe RubyChunk::Reader do
     @lines.count - 1
   end
 
+  def joined_lines(from, to)
+    @lines[from..to].join("\n")
+  end
+
   it "shows numbers of lines" do
-    lines_number = @content.split("\n").count
-    expect(@reader.lines_number).to eql(lines_number)
+    expect(@reader.lines_number).to eql(@lines.count)
   end
 
   it "should read whole file" do
@@ -29,32 +32,32 @@ RSpec.describe RubyChunk::Reader do
   it "should read lines in range" do
     from = 4
     to = 6
-    lines = File.readlines(@test_file)[from..to].join
+    lines = joined_lines(from, to)
     expect(@reader.lines_in_range(from, to)).to eql(lines)
   end
 
   it "should read head of the file" do
     to = RubyChunk::Reader::LINES_NUMBER - 1
-    head = @lines[0..to].join
+    head = joined_lines(0, to)
     expect(@reader.head).to eql(head)
   end
 
   it "should read tail of the file" do
     from = last_line_index - RubyChunk::Reader::LINES_NUMBER
-    tail = @lines[from..last_line_index].join
+    tail = joined_lines(from, last_line_index)
     expect(@reader.tail).to eql(tail)
   end
 
   it "should read particular number of lines from head" do
     number_of_lines = 3
-    head = @lines[0..number_of_lines-1].join
+    head = joined_lines(0, number_of_lines-1)
     expect(@reader.head(number_of_lines)).to eq(head)
   end
 
   it "should read particular number of lines from tail" do
     number_of_lines = 3
     from = last_line_index - number_of_lines
-    tail = @lines[from..last_line_index].join
+    tail = joined_lines(from, last_line_index)
     expect(@reader.tail(number_of_lines)).to eq(tail)
   end
 

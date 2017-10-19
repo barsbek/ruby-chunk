@@ -25,9 +25,10 @@ module RubyChunk
       result = []
       File.foreach(@file).with_index do |line, index|
         break if index > to
+        line = line.chomp
         result.push(line) if index >= from
       end
-      result.join
+      result.join("\n")
     end
 
     def head(n = Reader::LINES_NUMBER)
