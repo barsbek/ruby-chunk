@@ -85,4 +85,26 @@ RSpec.describe RubyChunk::Reader do
     expect(@reader.head(-big_number)).to be_nil
     expect(@reader.head(big_number)).to eql(chomped_content)
   end
+
+  it "should read specific number of bytes from each line" do
+    bytes = 10
+    @reader.line_bytes = bytes
+    lines = @lines.map{|line| line[0..bytes-1]}.join("\n")
+    expect(@reader.read).to eql(lines)
+  end
+
+  it "number of bytes should be resettable" do
+    @reader.line_bytes = 10
+    @reader.reset_bytes
+    expect(@reader.read).to eql(@content)
+  end
+
+  it "shouldn't fail on out-of-bounds bytes" do
+    @reader.line_bytes = 10000
+    expect(@reader.read).to eql(chomped_content)
+    @reader.line_bytes = 0
+    expect(@reader.read).to be_nil
+    @reader.line_bytes = -10000
+    expect(@reader.read).to be_nil
+  end
 end
