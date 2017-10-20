@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe RubyChunk::Reader do
   before(:each) do
     @test_file = "spec/testfile"
-    @lines = File.readlines(@test_file).map(&:chomp)
+    @lines = File.readlines(@test_file)
     @content = File.read(@test_file)
     @reader = RubyChunk::Reader.new(@test_file)
   end
@@ -13,11 +13,7 @@ RSpec.describe RubyChunk::Reader do
   end
 
   def joined_lines(from, to)
-    @lines[from..to].join("\n")
-  end
-
-  def chomped_content
-    @content.chomp
+    @lines[from..to].join
   end
 
   it "shows numbers of lines" do
@@ -68,11 +64,11 @@ RSpec.describe RubyChunk::Reader do
   it "shouldn't fail on incorrect ranges" do
     big_number = @lines.count + 100
     expect(@reader.lines_in_range(0, 0)).to eql(@lines[0])
-    expect(@reader.lines_in_range(-big_number, last_line_index)).to eql(chomped_content)
-    expect(@reader.lines_in_range(-big_number, last_line_index)).to eql(chomped_content)
-    expect(@reader.lines_in_range(0, big_number)).to eql(chomped_content)
-    expect(@reader.lines_in_range(0, big_number)).to eql(chomped_content)
-    expect(@reader.lines_in_range(-big_number, big_number)).to eql(chomped_content)
+    expect(@reader.lines_in_range(-big_number, last_line_index)).to eql(@content)
+    expect(@reader.lines_in_range(-big_number, last_line_index)).to eql(@content)
+    expect(@reader.lines_in_range(0, big_number)).to eql(@content)
+    expect(@reader.lines_in_range(0, big_number)).to eql(@content)
+    expect(@reader.lines_in_range(-big_number, big_number)).to eql(@content)
     expect(@reader.lines_in_range(big_number, big_number)).to be_nil
   end
 
@@ -80,16 +76,16 @@ RSpec.describe RubyChunk::Reader do
     big_number = @lines.count + 100
     expect(@reader.tail(0)).to be_nil
     expect(@reader.tail(-big_number)).to be_nil
-    expect(@reader.tail(big_number)).to eql(chomped_content)
+    expect(@reader.tail(big_number)).to eql(@content)
     expect(@reader.head(0)).to be_nil
     expect(@reader.head(-big_number)).to be_nil
-    expect(@reader.head(big_number)).to eql(chomped_content)
+    expect(@reader.head(big_number)).to eql(@content)
   end
 
   it "should read specific number of bytes from each line" do
     bytes = 10
     @reader.line_bytes = bytes
-    lines = @lines.map{|line| line[0..bytes-1]}.join("\n")
+    lines = @lines.map{|line| line[0..bytes-1]}.join
     expect(@reader.read).to eql(lines)
   end
 
@@ -101,7 +97,7 @@ RSpec.describe RubyChunk::Reader do
 
   it "shouldn't fail on out-of-bounds bytes" do
     @reader.line_bytes = 10000
-    expect(@reader.read).to eql(chomped_content)
+    expect(@reader.read).to eql(@content)
     @reader.line_bytes = 0
     expect(@reader.read).to be_nil
     @reader.line_bytes = -10000

@@ -34,11 +34,10 @@ module RubyChunk
       result = []
       File.foreach(@file).with_index do |line, index|
         break if index > to
-        line = line.chomp
         line = line[0..line_bytes-1] if line_bytes
         result.push(line) if index >= from
       end
-      result.join("\n")
+      result.join
     end
 
     def head(n = Reader::LINES_NUMBER)
