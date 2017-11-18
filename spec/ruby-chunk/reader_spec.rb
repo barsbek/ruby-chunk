@@ -31,8 +31,7 @@ including versions of Lorem Ipsum.
     lines_number - 1
   end
 
-  before do
-    print content
+  before(:each) do
     @reader = RubyChunk::Reader.new(content, StringIO)
   end
 
