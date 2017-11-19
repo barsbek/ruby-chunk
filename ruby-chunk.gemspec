@@ -13,4 +13,8 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   s.add_development_dependency "rspec", "~> 3.6"
+  s.add_development_dependency "cucumber", "~> 3.0"
+
+  s.add_dependency "thor", "~> 0.2"
+  s.add_dependency "rainbow", "~> 2.2"
 end
