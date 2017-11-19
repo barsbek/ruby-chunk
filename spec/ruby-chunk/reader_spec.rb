@@ -98,7 +98,6 @@ including versions of Lorem Ipsum.
 
   it "should read specific number of bytes from each line" do
     bytes = 10
-    @reader.line_bytes = bytes
     restr_lines = content.scan(/.*\n/).map{|line| line[0..bytes-1]}.join
     expect(@reader.read(10)).to eql(restr_lines)
   end

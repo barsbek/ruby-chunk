@@ -1,7 +1,6 @@
 module RubyChunk
   class Reader
     LINES_NUMBER = 10
-    attr_accessor :line_bytes
 
     def initialize(file_path, io = File)
       @io = io
