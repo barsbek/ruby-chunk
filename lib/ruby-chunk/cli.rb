@@ -19,10 +19,10 @@ module RubyChunk
         else
           reader = Reader.new(file)
           output << Rainbow("#{file}:").green
-          if options["line-bytes"]
-            output << reader.read(options["line-bytes"])
-          elsif options[:bytes]
+          if options[:bytes]
             output << reader.read_bytes(options[:bytes])
+          else
+            output << reader.read(options["line-bytes"])
           end
         end
       end
