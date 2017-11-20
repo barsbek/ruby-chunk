@@ -15,7 +15,6 @@ end
 
 Given("a file path {string}") do |path|
   @current_paths = @paths.select{ |p| p.include? path }
-  expect(@current_paths).not_to be_empty
 end
 
 Given("a list of file-paths") do |table|
