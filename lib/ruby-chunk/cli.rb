@@ -67,7 +67,7 @@ module RubyChunk
           output << Rainbow("#{file}:").green
           if options["line-bytes"]
             output << reader.read(options["line-bytes"])
-          elsif
+          else
             output << reader.head(options[:lines])
           end
         end
@@ -88,8 +88,8 @@ module RubyChunk
           output << Rainbow("#{file}:").green
           if options["line-bytes"]
             output << reader.read(options["line-bytes"])
-          elsif
-            output << reader.head(options[:lines])
+          else
+            output << reader.tail(options[:lines])
           end
         end
       end
