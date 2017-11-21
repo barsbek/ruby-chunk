@@ -1,74 +1,98 @@
-Feature: CLI commands
+@read @command @cli
+Feature: CLI "read" command
   In order to read some part of the FILES
-  I want to be able to execute specific commands
+  I want to be able to run "read" command
+  With or without options
 
   Background:
     Given a file "first/file/path" with content
       """
-      Content of first file.
-      Lorem Ipsum is simply dummy
-      text of the printing and typesetting
-      industry. Lorem Ipsum has been
-      the industry's standard dummy text
-      ever since the 1500s, when an unknown
-      printer took a galley of type
-      and scrambled it to make a
-      type specimen book.
-      It has survived not
-      only five centuries, but also
-      the leap into electronic typesetting,
-      remaining essentially unchanged.
-      It was popularised in the 1960s with
-      the release of Letraset sheets
-      containing Lorem Ipsum passages,
-      and more recently with desktop
-      publishing software like Aldus
-      PageMaker including versions.
+      Content of the first file.
+      With some Lorem Ipsum.
       """
     Given a file "second/file/path" with content
       """
-      Content of second file
+      Content of the second file
       """
     Given a file "third/file/path" with content
       """
-      And Content of third file
+      And content of the third file
       """
 
-  Scenario: 
+  Scenario: Read entire file
     Given a file path "first/file/path"
     When I run command "read"
-    Then I want result to include
-      |Content of first file|
-  
-  Scenario:
-    Given a list of file-paths
-      |first/file/path |
-      |second/file/path|
-      |third/file/path |
+    Then result should contain "first/file/path"
+    And result should contain "Content of the first file"
+
+  Scenario: Read entire content of every specified files
+    Given a list of files
+      | first/file/path  |
+      | second/file/path |
+      | third/file/path  |
     When I run command "read"
-    Then I want result to include
-      |Content of first file    |
-      |Content of second file   |
-      |And Content of third file|
-  
-  Scenario:
-    Given a file path "first/file/path"
-    When I run command "read"
-    Then I want result to include file's path
-      |first/file/path|
 
-  Scenario:
-    Given a file path "first/file/path"
-    When I run command "range"
-    Then I want result to include
-      |Content of first file|
+    Then result should contain "first/file/path"
+    And result should contain "second/file/path"
+    And result should contain "third/file/path"
 
-  Scenario:
-    Given a file path "first/file/path"
-    When I run command "head"
-    Then I want result to include first 10 lines
+    And result should contain "Content of the first file"
+    And result should contain "Content of the second file"
+    And result should contain "And content of the third file"
 
-  Scenario:
+  Scenario: Read first 5 bytes of the file's each line
     Given a file path "first/file/path"
-    When I run command "tail"
-    Then I want result to include last 10 lines
+    When I run command "read --line-bytes 5"
+    Then result should contain "first/file/path"
+    
+    And result should contain "Conte"
+    And result shouldn't contain "nt of the first file."
+
+    And result should contain "With "
+    And result shouldn't contain "some Lorem Ipsum"
+
+  Scenario: Read first 5 bytes of the file
+    Given a file path "first/file/path"
+    When I run command "read --bytes 5"
+
+    Then result should contain "Conte"
+    And result shouldn't contain "nt of the first file."
+    And result shouldn't contain "With some Lorem Ipsum."
+
+  Scenario: Read first 2 bytes from each line of multiple files
+    Given a list of files
+      | first/file/path  |
+      | second/file/path |
+      | third/file/path  |
+    When I run command "read --line-bytes 10"
+
+    Then result should contain "first/file/path"
+    And result should contain "Co"
+    And result shouldn't contain "ntent of the first file."
+    And result should contain "Wi"
+    And result shouldn't contain "th some Lorem Ipsum"
+
+    And result should contain "second/file/path"
+    And result should contain "Co"
+    And result shouldn't contain "ntent the second file"
+
+    And result should contain "third/file/path"
+    And result should contain "An"
+    And result shouldn't contain "d Content of the third file"
+
+  Scenario: Read first 5 bytes from each of specified files
+    Given a list of files
+      | first/file/path  |
+      | second/file/path |
+      | third/file/path  |
+    When I run command "read --bytes 5"
+
+    Then result should contain "Conte"
+    And result shouldn't contain "nt of the first file."
+    And result shouldn't contain "With some Lorem Ipsum."
+
+    And result should contain "Conte"
+    And result shouldn't contain "nt of the second file"
+
+    And result should contain "And c"
+    And result shouldn't contain "ontent of the third file"

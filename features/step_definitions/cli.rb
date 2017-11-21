@@ -18,41 +18,20 @@ Given("a file path {string}") do |path|
   @current_paths = @paths.select{ |p| p.include? path }
 end
 
-Given("a list of file-paths") do |table|
+Given("a list of files") do |table|
   @current_paths = @paths.select do |p|
     table.raw.find{|row| p.include? row.first}
   end
 end
 
 When("I run command {string}") do |command|
-  @obtained = `exe/rubychunk #{command} #{@current_paths.join(" ")}`
+  @result = `exe/rubychunk #{command} #{@current_paths.join(" ")}`
 end
 
-Then("I want result to include") do |table|
-  table.raw.each do |row|
-    content = row.first
-    expect(@obtained).to include(content)
-  end
+Then("result should contain {string}") do |content|
+  expect(@result).to include(content)
 end
 
-Then("I want result to include file's path") do |table|
-  step "I want result to include", table
-end
-
-Then("I want result to include first {int} lines") do |n|
-  @current_paths.each do |path|
-    lines = @files[path].scan /.*\n/
-    lines = lines[0..n-1].join
-    step "I want result to include", table([[ lines ]])
-  end
-end
-
-Then("I want result to include last {int} lines") do |n|
-  @current_paths.each do |path|
-    lines = @files[path].split("\n")
-    to = lines.size - 1
-    from = to - n
-    lines = lines[from..to].join("\n")
-    step "I want result to include", table([[ lines ]])
-  end
+Then("result shouldn't contain {string}") do |content|
+  expect(@result).not_to include(content)
 end
