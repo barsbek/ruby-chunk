@@ -2,7 +2,7 @@ require 'tempfile'
 
 Given("a file {string} with content") do |path, content|
   @paths ||= []
-  tmp_dir = File.expand_path("../../tmp", File.dirname(__FILE__))
+  tmp_dir = File.expand_path("../../tmp/ruby-chunk", File.dirname(__FILE__))
   dir = File.expand_path(File.dirname(path), tmp_dir)
   FileUtils.mkdir_p(dir)
   file = Tempfile.new(path, tmp_dir)
