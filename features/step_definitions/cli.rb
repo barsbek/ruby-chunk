@@ -24,6 +24,10 @@ Given("a list of files") do |table|
   end
 end
 
+Given("nonexisting file's path") do
+  @current_paths = ["nonexisting/file/path"]
+end
+
 When("I run command {string}") do |command|
   @result = `exe/rubychunk #{command} #{@current_paths.join(" ")}`
 end

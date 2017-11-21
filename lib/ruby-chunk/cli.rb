@@ -112,7 +112,7 @@ module RubyChunk
           output << "#{Rainbow(file).green}: #{lines}"
         end
       end
-      output << "#{Rainbow('Total').blue}: #{total}"
+      output << "#{Rainbow('Total').blue}: #{total}" if output.size > 1
       puts output.join("\n")
     end
   end
