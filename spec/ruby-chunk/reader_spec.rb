@@ -59,7 +59,7 @@ including versions of Lorem Ipsum.
   end
 
   it "should read tail of the file" do
-    from = last_line_index - RubyChunk::Reader::LINES_NUMBER
+    from = last_line_index - RubyChunk::Reader::LINES_NUMBER + 1
     tail = lines(from, last_line_index)
     expect(@reader.tail).to eql(tail)
   end
@@ -72,7 +72,7 @@ including versions of Lorem Ipsum.
 
   it "should read particular number of lines from tail" do
     number_of_lines = 3
-    from = last_line_index - number_of_lines
+    from = last_line_index - number_of_lines + 1
     tail = lines(from, last_line_index)
     expect(@reader.tail(number_of_lines)).to eq(tail)
   end
