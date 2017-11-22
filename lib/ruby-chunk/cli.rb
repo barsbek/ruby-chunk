@@ -42,7 +42,7 @@ module RubyChunk
           reader = Reader.new(file)
           output << Rainbow("#{file}:").green
           to = options[:to] || reader.lines_number - 1
-          result = reader.lines_in_range(options[:from], to, options["line-bytes"])
+          result = reader.lines_in_range(options[:from], to.to_i, options["line-bytes"])
           if result.nil?
             output << Rainbow("No lines in specified range").yellow
           else
