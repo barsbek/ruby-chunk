@@ -48,15 +48,15 @@ module RubyChunk
 
     def head(n, line_bytes = nil)
       n ||= Reader::LINES_NUMBER
-      return nil if n - 1 < 0
+      return nil if n < 1
       lines_in_range(0, n - 1, line_bytes)
     end
 
     def tail(n, line_bytes = nil)
       n ||= Reader::LINES_NUMBER
-      return nil if n - 1 < 0
+      return nil if n < 1
       last_index = lines_number - 1
-      lines_in_range(last_index - n, last_index, line_bytes)
+      lines_in_range(last_index - n + 1, last_index, line_bytes)
     end
   end
 end
