@@ -2,8 +2,7 @@ require "spec_helper"
 
 RSpec.describe RubyChunk::Reader do
   def content
-    <<-EOF
-Lorem Ipsum is simply dummy text of the printing
+"Lorem Ipsum is simply dummy text of the printing
 and typesetting industry. Lorem Ipsum has been the
 industry's standard dummy text ever since the 1500s,
 when an unknown printer took a galley of type and
@@ -14,8 +13,7 @@ essentially unchanged. It was popularised in the 1960s
 with the release of Letraset sheets containing
 Lorem Ipsum passages, and more recently with
 desktop publishing software like Aldus PageMaker
-including versions of Lorem Ipsum.
-    EOF
+including versions of Lorem Ipsum."
   end
 
   def lines_number
@@ -23,7 +21,7 @@ including versions of Lorem Ipsum.
   end
 
   def lines(from, to)
-    lines_array = content.scan /.*\n/
+    lines_array = content.split(/(\n)/).each_slice(2).map(&:join)
     lines_array[from..to].join
   end
 
@@ -96,10 +94,9 @@ including versions of Lorem Ipsum.
     expect(@reader.head(big_number)).to eql(content)
   end
 
-  it "should read specific number of bytes from each line" do
-    bytes = 10
-    restr_lines = content.scan(/.*\n/).map{|line| line[0..bytes-1]}.join
-    expect(@reader.read(10)).to eql(restr_lines)
+  it "should read particular number of bytes from each line" do
+    restr_lines = "Lore\nand \nindu\nwhen\nscra\nIt h\nbut \nesse\nwith\nLore\ndesk\nincl"
+    expect(@reader.read(4)).to eql(restr_lines)
   end
 
   it "shouldn't fail on out-of-bounds bytes" do
@@ -108,3 +105,4 @@ including versions of Lorem Ipsum.
     expect(@reader.read(-10000)).to be_nil
   end
 end
+

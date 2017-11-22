@@ -36,8 +36,11 @@ module RubyChunk
       index = 0
       @file.each_line do |line|
         break if index > to
-        #TODO: last character of the lines should be new line character
-        line = line[0..line_bytes-1] if line_bytes
+        if line_bytes
+          new_line = line[0..line_bytes-1]
+          new_line += "\n" if (line[-1] == "\n" && new_line[-1] != "\n")
+          line = new_line
+        end
         result.push(line) if index >= from
         index += 1
       end
