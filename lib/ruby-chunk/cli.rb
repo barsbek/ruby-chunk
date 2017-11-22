@@ -31,8 +31,8 @@ module RubyChunk
 
     desc "range [OPTIONS] FILES",
     "Print specified range of lines in every of FILES"
-    method_option :from, :aliases => "-f", default: 0
-    method_option :to, :aliases => "-t"
+    method_option :from, :aliases => "-f", default: 0, type: :numeric
+    method_option :to, :aliases => "-t", type: :numeric
     def range(*paths)
       output = []
       paths.each do |file|

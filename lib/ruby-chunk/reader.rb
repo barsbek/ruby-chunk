@@ -30,16 +30,15 @@ module RubyChunk
     end
 
     def lines_in_range(from, to, line_bytes=nil)
-      #TODO: convert options to integer, as string may be received
       return nil if !line_bytes.nil? && line_bytes <= 0
-      return nil if from.to_i > lines_number - 1
+      return nil if from > lines_number - 1
       result = []
       index = 0
       @file.each_line do |line|
         break if index > to
         #TODO: last character of the lines should be new line character
         line = line[0..line_bytes-1] if line_bytes
-        result.push(line) if index >= from.to_i
+        result.push(line) if index >= from
         index += 1
       end
       @file.rewind
