@@ -46,13 +46,13 @@ module RubyChunk
       result.join
     end
 
-    def head(n, line_bytes = nil)
+    def head(n = nil, line_bytes = nil)
       n ||= Reader::LINES_NUMBER
       return nil if n < 1
       lines_in_range(0, n - 1, line_bytes)
     end
 
-    def tail(n, line_bytes = nil)
+    def tail(n = nil, line_bytes = nil)
       n ||= Reader::LINES_NUMBER
       return nil if n < 1
       last_index = lines_number - 1
