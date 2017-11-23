@@ -8,9 +8,16 @@ Gem::Specification.new do |s|
   s.summary = "Gem for getting some part of the file"
   s.authors = ["barsbek"]
   s.email = "mak.bekmamat@gmail.com"
-  s.files = ["lib/ruby-chunk.rb", "lib/ruby-chunk/version.rb", "lib/ruby-chunk/reader.rb"]
   s.homepage = "https://github.com/barsbek/ruby-chunk"
   s.license = 'MIT'
+
+  s.files = [
+    "lib/ruby-chunk.rb",
+    "lib/ruby-chunk/version.rb",
+    "lib/ruby-chunk/reader.rb",
+    "lib/ruby-chunk/cli.rb"
+  ]
+  s.executables = ["rubychunk"]
 
   s.add_development_dependency "rspec", "~> 3.6"
   s.add_development_dependency "cucumber", "~> 3.0"
